@@ -1,21 +1,15 @@
 # The Karters 2: Turbo Charged - LiveSplit AutoSplitter
 
-An advanced, frame-perfect AutoSplitter script for **The Karters 2: Turbo Charged**. This script hooks directly into the game engine's memory space to handle all timer operations automatically.
+An advanced, high-precision AutoSplitter script for **The Karters 2: Turbo Charged**. This script hooks into the game's IL2CPP memory layer to sync LiveSplit cleanly with internal engine data.
 
 ## Features
 
-* **Automatic Start:** The timer begins the exact millisecond the pre-race countdown.".
-* **Precise Splitting:** Automatically triggers a split the exact frame you cross the finish line, working seamlessly for mid-cup transitions and final cup podium screens.
-* **Direct Memory Timing Sync:** Reads the internal race timer directly from memory to completely eliminate millisecond drift caused by system latency or frame rate fluctuations.
+* **Automatic Start:** The timer fires the exact frame the pre-race countdown ends.
+* **Stitched Master IGT Tracking:** Automatically accumulates individual map times into a unified running total, fixing broken split segments and calculating total Cup In-Game Time (IGT) perfectly.
+* **Clean Pausing:** Retains complete layout pausing during game menus, loading sequences, and pre-race countdown states without misfiring false splits.
 
-## Setup Instructions
+## Configuration Requirements
 
-1. Open **LiveSplit**.
-2. Right-click the layout and select **Edit Splits...**
-3. Ensure the Game Name is set exactly to: `The Karters 2: Turbo Charged`.
-4. Click the **Activate** button to pull the official script configuration.
-5. **Crucial Step:** Right-click LiveSplit, go to **Compare Against**, and verify it is set to **Game Time**. If left on *Real Time*, the auto-pauses and exact memory sync hooks will not display correctly.
-
-## Hardware & Framerate Compatibility
-
-The script utilizes direct memory injection logic via the `gameTime` block. Because it pulls values directly from the game logic rather than calculating time based on CPU frame intervals, timing accuracy is 100% consistent across all hardware profiles—regardless of whether the game is running at 30 FPS, 60 FPS, or 300+ FPS.
+1. Right-click LiveSplit and open **Edit Splits...**
+2. Ensure your Game Name is set precisely to: `The Karters 2: Turbo Charged` and click **Activate**.
+3. **Crucial:** Right-click LiveSplit, hover over **Compare Against**, and select **Game Time**. Because this script overrides the layout timeline with raw memory ticks to prevent frame-drift, it will not display properly if left on *Real Time*.
