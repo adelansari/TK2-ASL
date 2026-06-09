@@ -15,25 +15,27 @@ init
 
 start
 {
-    // Starts perfectly when the countdown hits "GO!" and the timer starts climbing
-    if (current.raceTimer > 0.0 && old.raceTimer == 0.0)
-    {
-        return true;
-    }
+    // Starts after the race countdown
+    return current.raceTimer > 0.0 && old.raceTimer == 0.0;
 }
 
 split
 {
-    // Splits the exact frame the game registers the race as finished (dropping from 1 to 0).
-    // The timer check ensures it won't accidentally trigger a split if you manually reset to the main menu.
-    if (old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0)
+    return old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0;
+}
+
+gameTime
+{
+    // Directly injects the exact in-game memory float to eliminate millisecond drift
+    if (current.raceActive == 0 && old.raceActive == 1)
     {
-        return true;
+        return TimeSpan.FromSeconds(old.raceTimer);
     }
+    return TimeSpan.FromSeconds(current.raceTimer);
 }
 
 isLoading
 {
-    // Pauses LiveSplit whenever you hit the pause menu or are stuck in a loading screen.
-    return current.raceTimer == old.raceTimer || current.raceTimer == 0.0;
+    // Hand over total clock management to the gameTime block
+    return true;
 }
