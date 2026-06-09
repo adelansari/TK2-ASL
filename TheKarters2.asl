@@ -11,12 +11,25 @@ state("TheKarters2")
 init
 {
     refreshRate = 60;
+    vars.accumulatedTime = 0.0;
 }
 
 start
 {
-    // Starts after the race countdown
-    return current.raceTimer > 0.0 && old.raceTimer == 0.0;
+    if (current.raceTimer > 0.0 && old.raceTimer == 0.0)
+    {
+        vars.accumulatedTime = 0.0; // Flushes old cup data for a fresh run
+        return true;
+    }
+}
+
+update
+{
+    // The exact frame a race ends, permanently commit its final time to our master total
+    if (old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0)
+    {
+        vars.accumulatedTime += current.raceTimer;
+    }
 }
 
 split
@@ -26,16 +39,17 @@ split
 
 gameTime
 {
-    // Directly injects the exact in-game memory float to eliminate millisecond drift
-    if (current.raceActive == 0 && old.raceActive == 1)
+    // If actively racing, show the cumulative past tracks + the current race track progression
+    if (current.raceActive == 1)
     {
-        return TimeSpan.FromSeconds(old.raceTimer);
+        return TimeSpan.FromSeconds(vars.accumulatedTime + current.raceTimer);
     }
-    return TimeSpan.FromSeconds(current.raceTimer);
+    
+    // If in a loading screen, pause menu, or countdown, hold completely solid on the accumulated total
+    return TimeSpan.FromSeconds(vars.accumulatedTime);
 }
 
 isLoading
 {
-    // Hand over total clock management to the gameTime block
     return true;
 }
