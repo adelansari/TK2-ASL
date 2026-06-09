@@ -11,45 +11,49 @@ state("TheKarters2")
 init
 {
     refreshRate = 60;
-    vars.accumulatedTime = 0.0;
+    vars.accumulatedTime = 0D;
+    vars.justFinished = false;     // Local state cache
+}
+
+update
+{
+    // 1. Evaluate the finish line trigger exactly ONCE per memory tick
+    vars.justFinished = (old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0);
+
+    // 2. If the state just flipped to finished, append the time to our master total
+    if (vars.justFinished)
+    {
+        vars.accumulatedTime += current.raceTimer;
+    }
 }
 
 start
 {
     if (current.raceTimer > 0.0 && old.raceTimer == 0.0)
     {
-        vars.accumulatedTime = 0.0; // Flushes old cup data for a fresh run
+        vars.accumulatedTime = 0D;
         return true;
-    }
-}
-
-update
-{
-    // The exact frame a race ends, permanently commit its final time to our master total
-    if (old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0)
-    {
-        vars.accumulatedTime += current.raceTimer;
     }
 }
 
 split
 {
-    return old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0;
+    return vars.justFinished;
 }
 
 gameTime
 {
-    // If actively racing, show the cumulative past tracks + the current race track progression
+    // Dynamically render the UI clock based on active racing state
     if (current.raceActive == 1)
     {
         return TimeSpan.FromSeconds(vars.accumulatedTime + current.raceTimer);
     }
     
-    // If in a loading screen, pause menu, or countdown, hold completely solid on the accumulated total
     return TimeSpan.FromSeconds(vars.accumulatedTime);
 }
 
 isLoading
 {
+    // Delegate all timing pauses to the gameTime block
     return true;
 }
