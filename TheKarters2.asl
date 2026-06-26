@@ -1,3 +1,5 @@
+// IL2CPP Migration & Rewrite: DarkSlayer
+
 state("TheKarters2")
 {
     // Primary Timer Path (Instruction: movss [rax+2C], xmm6)
@@ -20,10 +22,17 @@ update
     // 1. Evaluate the finish line trigger exactly ONCE per memory tick
     vars.justFinished = (old.raceActive == 1 && current.raceActive == 0 && current.raceTimer > 0.0);
 
-    // 2. If the state just flipped to finished, append the time to our master total
+    // 2. Handle time accumulation based on race state transitions
     if (vars.justFinished)
     {
+        // Crossed the finish line: append the final successful race time to our master total
         vars.accumulatedTime += current.raceTimer;
+    }
+    else if (old.raceActive == 1 && current.raceTimer < old.raceTimer)
+    {
+        // Mid-race restart detected: you were actively racing, but the timer suddenly dropped.
+        // Append the aborted attempt's final frame time to the total so it doesn't vanish.
+        vars.accumulatedTime += old.raceTimer;
     }
 }
 
