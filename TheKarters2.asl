@@ -1,13 +1,14 @@
-// IL2CPP Migration & Rewrite: DarkSlayer [1.0.2] - 2026-09-08
+// IL2CPP Migration & Rewrite: DarkSlayer [1.0.3] - 2026-09-13
+// Game version: Early Access v0.1.4.4
 
 state("TheKarters2")
 {
     // Primary Timer Path (Instruction: movss [rax+2C], xmm6)
-    float raceTimer   : "GameAssembly.dll", 0x043AD150, 0xB8, 0x2C;
+    float raceTimer   : "GameAssembly.dll", 0x043C0B48, 0xB8, 0x2C;
 
     // New Race Status Flag (Instruction: mov [rax+29], cl)
     // 1 = Racing, 0 = Race Over / Menus
-    byte raceActive   : "GameAssembly.dll", 0x043AD150, 0xB8, 0x29;
+    byte raceActive   : "GameAssembly.dll", 0x043C0B48, 0xB8, 0x29;
 }
 
 init

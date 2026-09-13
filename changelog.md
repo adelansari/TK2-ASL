@@ -1,5 +1,9 @@
 # Changelog:
 
+## [1.0.3] - 2026-09-13
+### Fixed
+- Updated the base memory offset for game version Early Access v0.1.4.4
+
 ## [1.0.2] - 2026-09-08
 ### Fixed
 - Updated the base memory offset to restore autosplitter functionality following the latest game update.
