@@ -1,5 +1,9 @@
 # Changelog:
 
+## [1.0.4] - 2026-10-05
+### Fixed
+- Updated the base memory offset for game version Early Access v0.1.4.18
+
 ## [1.0.3] - 2026-09-13
 ### Fixed
 - Updated the base memory offset for game version Early Access v0.1.4.4
